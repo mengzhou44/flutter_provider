@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'counter.dart';
+import 'new-page.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(ChangeNotifierProvider<Counter>(
+    builder: (_) => Counter(0), child: MyApp()));
 
 class MyApp extends StatelessWidget {
- 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -13,10 +14,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: ChangeNotifierProvider<Counter>(
-        builder: (_) => Counter(0),
-        child: MyHomePage(),
-      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => MyHomePage(),
+        '/new': (context) => NewPage(),
+      },
     );
   }
 }
@@ -27,7 +29,7 @@ class MyHomePage extends StatelessWidget {
     final counter = Provider.of<Counter>(context);
     return Scaffold(
         appBar: AppBar(
-          title: Text('Flutter Provider'),
+          title: Text('Home Page'),
         ),
         body: Center(
           child: Column(
@@ -40,6 +42,12 @@ class MyHomePage extends StatelessWidget {
                 '${counter.getCounter()}',
                 style: Theme.of(context).textTheme.display1,
               ),
+              RaisedButton(
+                child: Text('Go'),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/new');
+                },
+              )
             ],
           ),
         ),
